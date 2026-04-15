@@ -17,6 +17,32 @@ The current version supports:
 - automatic updates as files and drives change
 - offline use through a local server and local index
 
+## Screenshots
+
+### Collections view
+
+![Collections view](docs/screenshots/collections-view.png)
+
+Folder-based browsing grouped by source, with separate device cards for `This Mac` and attached removable storage.
+
+### Favorites view
+
+![Favorites view](docs/screenshots/favorites-view.png)
+
+Local-only favorites with a dedicated sort mode and the same device-aware layout as the rest of the app.
+
+### Video lightbox
+
+![Video lightbox](docs/screenshots/video-lightbox.png)
+
+The lightbox viewer for video, including playback, metadata, file actions, and keyboard shortcut hints.
+
+### Image lightbox
+
+![Image lightbox](docs/screenshots/image-lightbox.png)
+
+Image viewing with dimensions, file details, Finder integration, and desktop file actions.
+
 ## Key Features
 
 ### Device-based browsing

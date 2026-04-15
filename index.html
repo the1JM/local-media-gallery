@@ -1713,9 +1713,10 @@
       library = await response.json();
       render();
       if (openPath) {
-        const stillVisible = visibleMedia.some((item) => item.path === openPath);
-        if (stillVisible) {
-          openLightbox(openPath);
+        const nextIndex = visibleMedia.findIndex((item) => item.path === openPath);
+        if (nextIndex >= 0) {
+          activeIndex = nextIndex;
+          syncLightboxFavoriteState();
         } else {
           closeViewer();
         }
