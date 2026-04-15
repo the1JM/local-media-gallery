@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.jm.media-gallery-indexer</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>{{SUPPORT_DIR}}/sync_gallery_data.py</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>{{SUPPORT_DIR}}</string>
+
+  <key>WatchPaths</key>
+  <array>
+    <string>{{HOME}}/Desktop</string>
+    <string>{{HOME}}/Pictures</string>
+    <string>{{HOME}}/Downloads</string>
+    <string>{{HOME}}/Movies</string>
+    <string>/Volumes</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>StartOnMount</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>{{SUPPORT_DIR}}/indexer.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>{{SUPPORT_DIR}}/indexer-error.log</string>
+</dict>
+</plist>

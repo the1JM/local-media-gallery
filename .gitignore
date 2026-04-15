@@ -1,0 +1,11 @@
+.DS_Store
+__pycache__/
+*.pyc
+cache/
+logs/
+gallery-data.json
+gallery-data.js
+HANDOFF.md
+*.log
+launchd/*.plist
+!/launchd/*.template.plist

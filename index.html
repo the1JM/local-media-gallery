@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Gallery</title>
+  <style>
+    :root {
+      --bg-top: #091619;
+      --bg-bottom: #142229;
+      --panel: rgba(14, 26, 31, 0.76);
+      --panel-strong: rgba(18, 34, 40, 0.92);
+      --panel-soft: rgba(242, 249, 248, 0.08);
+      --ink: #eff8f7;
+      --muted: #93a9ad;
+      --accent: #25aaa7;
+      --accent-strong: #0f676c;
+      --accent-soft: rgba(37, 170, 167, 0.14);
+      --line: rgba(181, 230, 227, 0.1);
+      --shadow: 0 28px 80px rgba(0, 0, 0, 0.26);
+      --shadow-soft: 0 18px 34px rgba(0, 0, 0, 0.2);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "SF Pro Display", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(37, 170, 167, 0.2), transparent 30%),
+        radial-gradient(circle at 100% 10%, rgba(244, 162, 97, 0.18), transparent 28%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    }
+
+    .shell {
+      width: min(1280px, calc(100% - 36px));
+      margin: 20px auto 42px;
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 34px;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 22px;
+      align-items: end;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #8ce0d9;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      font-family: "Iowan Old Style", Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 8vw, 76px);
+      line-height: 0.94;
+      letter-spacing: -0.045em;
+    }
+
+    .subcopy {
+      margin: 0;
+      max-width: 58ch;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .stat {
+      min-height: 128px;
+      padding: 18px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(248, 255, 254, 0.04);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stat-label {
+      margin: 0 0 12px;
+      color: #7ba1a5;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .stat-value {
+      margin: 0;
+      font-size: clamp(20px, 2.8vw, 32px);
+      line-height: 1.18;
+      font-weight: 650;
+      letter-spacing: -0.03em;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto auto;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .search,
+    .select,
+    .button,
+    .mode-button {
+      min-height: 56px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      font: inherit;
+      box-shadow: var(--shadow-soft);
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease;
+    }
+
+    .search,
+    .select {
+      background: rgba(248, 255, 254, 0.05);
+      color: var(--ink);
+    }
+
+    .search {
+      padding: 0 18px;
+    }
+
+    .search::placeholder {
+      color: #81999e;
+    }
+
+    .select {
+      min-width: 176px;
+      padding: 0 18px;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M3.5 5.25L7 8.75L10.5 5.25' stroke='%2396ece4' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-position: calc(100% - 16px) 50%;
+      background-size: 14px 14px;
+      background-repeat: no-repeat;
+      color: #ddf7f5;
+      font-weight: 650;
+      padding-right: 42px;
+    }
+
+    .button {
+      padding: 0 18px;
+      background: linear-gradient(135deg, rgba(20, 92, 97, 0.96), rgba(12, 54, 59, 0.96));
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      text-underline-offset: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .text-button {
+      min-height: auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #8ddfd8;
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+      justify-self: end;
+      box-shadow: none;
+      display: none;
+      text-decoration: underline;
+      text-decoration-color: rgba(141, 223, 216, 0.35);
+      text-underline-offset: 0.2em;
+    }
+
+    .text-button.visible {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .button:hover,
+    .mode-button:hover,
+    .select:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 36px rgba(0, 0, 0, 0.22);
+    }
+
+    .search:focus,
+    .select:focus,
+    .button:focus,
+    .mode-button:focus {
+      outline: none;
+      border-color: rgba(112, 214, 208, 0.34);
+      box-shadow: 0 0 0 4px rgba(37, 170, 167, 0.14), 0 22px 36px rgba(0, 0, 0, 0.24);
+    }
+
+    .text-button:hover,
+    .text-button:focus {
+      transform: none;
+      box-shadow: none;
+      color: #b4f2ec;
+      outline: none;
+      text-decoration-color: rgba(180, 242, 236, 0.55);
+    }
+
+    .mode-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .mode-group {
+      display: inline-flex;
+      gap: 10px;
+    }
+
+    .mode-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .mode-button {
+      min-width: 136px;
+      padding: 0 18px;
+      background: rgba(248, 255, 254, 0.04);
+      color: #cde7e4;
+      cursor: pointer;
+    }
+
+    .mode-button.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+      color: white;
+      border-color: transparent;
+    }
+
+    .mode-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .path-label {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      color: var(--muted);
+      font-size: 14px;
+      min-height: 21px;
+    }
+
+    .status-panel {
+      display: none;
+      margin-bottom: 18px;
+      padding: 18px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: rgba(248, 255, 254, 0.045);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .status-panel.visible {
+      display: block;
+    }
+
+    .status-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .status-summary {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin: 0;
+      max-width: 72ch;
+      color: #d8f2ef;
+      line-height: 1.6;
+    }
+
+    .status-summary-part {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .status-summary-sep {
+      color: rgba(141, 223, 216, 0.5);
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .status-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .status-item {
+      text-align: left;
+      padding: 14px 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(248, 255, 254, 0.04);
+    }
+
+    button.status-item {
+      width: 100%;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease;
+    }
+
+    button.status-item:hover {
+      transform: translateY(-1px);
+      border-color: rgba(124, 220, 214, 0.24);
+      box-shadow: 0 22px 36px rgba(0, 0, 0, 0.22);
+    }
+
+    button.status-item:focus {
+      outline: none;
+      border-color: rgba(112, 214, 208, 0.34);
+      box-shadow: 0 0 0 4px rgba(37, 170, 167, 0.14), 0 22px 36px rgba(0, 0, 0, 0.24);
+    }
+
+    button.status-item[disabled] {
+      cursor: default;
+      opacity: 0.72;
+      transform: none;
+    }
+
+    .status-item.warning {
+      background: rgba(167, 96, 36, 0.13);
+      border-color: rgba(240, 179, 104, 0.18);
+    }
+
+    .status-item.danger {
+      background: rgba(122, 36, 43, 0.18);
+      border-color: rgba(255, 143, 143, 0.16);
+    }
+
+    .status-title {
+      margin: 0 0 6px;
+      color: #ecfbf8;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .status-meta,
+    .status-detail {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .status-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+    }
+
+    .meta-part,
+    .path-part {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .meta-sep,
+    .path-sep {
+      color: rgba(141, 223, 216, 0.5);
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      overflow: clip;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel-strong);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(124, 220, 214, 0.24);
+      box-shadow: 0 24px 42px rgba(0, 0, 0, 0.24);
+    }
+
+    .thumb,
+    .video-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #173037, #0c1c21);
+    }
+
+    .collection-thumb {
+      position: relative;
+    }
+
+    .collection-badge {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(7, 20, 24, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #d9f5f2;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .meta {
+      display: grid;
+      gap: 10px;
+      min-height: 136px;
+      padding: 18px;
+      align-content: start;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .details {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      min-width: 0;
+    }
+
+    .details.path {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 39px;
+    }
+
+    .details.date {
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: auto;
+      min-width: 0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #9beae2;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex: 0 0 auto;
+      margin-left: auto;
+    }
+
+    .empty {
+      display: none;
+      padding: 42px 24px;
+      border-radius: var(--radius);
+      border: 1px dashed var(--line);
+      background: rgba(248, 255, 254, 0.04);
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .favorite-toggle {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(7, 20, 24, 0.78);
+      color: rgba(242, 249, 248, 0.92);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+      z-index: 2;
+    }
+
+    .favorite-toggle:hover {
+      transform: translateY(-1px);
+      background: rgba(10, 28, 33, 0.9);
+      border-color: rgba(141, 230, 224, 0.2);
+    }
+
+    .favorite-toggle.active {
+      background: rgba(209, 150, 63, 0.22);
+      border-color: rgba(255, 205, 112, 0.34);
+      color: #ffd880;
+    }
+
+    .favorite-toggle:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      transform: none;
+    }
+
+    .favorite-toggle svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(5, 10, 13, 0.78);
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-frame {
+      width: min(1180px, 100%);
+      max-height: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .lightbox-media {
+      width: 100%;
+      max-height: calc(100vh - 48px);
+      object-fit: contain;
+      border-radius: 26px;
+      background: #071318;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .lightbox-media-wrap {
+      position: relative;
+    }
+
+    .fullscreen-overlay {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 19, 24, 0.72);
+      color: white;
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
+    }
+
+    .fullscreen-overlay:hover {
+      transform: translateY(-1px);
+      background: rgba(12, 31, 37, 0.82);
+      border-color: rgba(141, 230, 224, 0.2);
+    }
+
+    .fullscreen-overlay svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .lightbox-fallback {
+      min-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 32px;
+      border-radius: 26px;
+      background: #071318;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+      color: var(--ink);
+    }
+
+    .lightbox-fallback p {
+      margin: 0;
+      max-width: 36ch;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .lightbox-panel {
+      align-self: center;
+      padding: 22px;
+      border-radius: 26px;
+      background: rgba(18, 31, 36, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .lightbox-panel h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      line-height: 1.24;
+    }
+
+    .lightbox-panel p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .lightbox-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .lightbox-actions .button {
+      min-width: 104px;
+      min-height: 40px;
+      font-size: 14px;
+      padding: 0 14px;
+    }
+
+    .lightbox-actions .button.primary-action {
+      grid-column: 1 / -1;
+    }
+
+    .lightbox-secondary {
+      margin-top: 12px;
+      padding-top: 12px;
+      padding-bottom: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: grid;
+      gap: 10px;
+    }
+
+    .shortcut-hint {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+      margin: 2px 0 0;
+      color: #7fa0a4;
+      font-size: 12px;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+
+    .shortcut-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(248, 255, 254, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .shortcut-key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 7px;
+      background: rgba(6, 18, 23, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: #def7f4;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .shortcut-text {
+      color: #87a6aa;
+      font-weight: 600;
+    }
+
+    .button.subtle {
+      width: 100%;
+      min-height: 36px;
+      background: rgba(248, 255, 254, 0.08);
+      color: #d2efeb;
+      border-color: rgba(147, 221, 216, 0.14);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      font-weight: 650;
+      gap: 10px;
+      font-size: 13px;
+      padding: 0 12px;
+    }
+
+    .button.subtle:hover {
+      background: rgba(248, 255, 254, 0.12);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .button.subtle svg {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+    }
+
+    .button.danger {
+      background: linear-gradient(135deg, rgba(122, 36, 43, 0.96), rgba(79, 18, 27, 0.96));
+      border-color: rgba(255, 143, 143, 0.08);
+    }
+
+    .close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .lightbox-frame {
+        grid-template-columns: 1fr;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .shell {
+        width: min(100% - 20px, 1280px);
+        margin: 10px auto 26px;
+        padding: 18px;
+      }
+
+      .lightbox-media {
+        max-height: 58vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Local Media Browser</div>
+        <h1>Your Mac’s visual library, reimagined.</h1>
+        <p class="subcopy">
+          Browse every indexed photo and video across your chosen folders and mounted drives, then switch into Collections to explore media by folder with live previews.
+        </p>
+      </div>
+      <div class="stats">
+        <article class="stat">
+          <p class="stat-label">Media</p>
+          <p class="stat-value" id="mediaCount">0</p>
+        </article>
+        <article class="stat">
+          <p class="stat-label">Collections</p>
+          <p class="stat-value" id="collectionCount">0</p>
+        </article>
+        <article class="stat">
+          <p class="stat-label">Newest</p>
+          <p class="stat-value" id="newestDate">-</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Search by file name, text in image, or concepts like face">
+      <select class="select" id="typeFilter">
+        <option value="all">All Media</option>
+        <option value="image">Images</option>
+        <option value="video">Videos</option>
+      </select>
+      <select class="select" id="sort">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="name">Name</option>
+        <option value="size">Largest First</option>
+      </select>
+      <button class="text-button" id="resetFiltersButton" type="button">Reset filters</button>
+    </section>
+
+    <section class="mode-row">
+      <div class="mode-controls">
+        <div class="mode-group">
+          <button class="mode-button active" id="libraryMode" type="button">Library</button>
+          <button class="mode-button" id="collectionsMode" type="button">Collections</button>
+          <button class="mode-button" id="favoritesMode" type="button">Favorites</button>
+        </div>
+        <select class="select" id="sourceFilter" aria-label="Source">
+          <option value="system">This Mac</option>
+        </select>
+      </div>
+      <div class="path-label" id="pathLabel">All indexed media</div>
+    </section>
+
+    <section class="status-panel" id="statusPanel" aria-live="polite">
+      <div class="status-header">
+        <div class="status-summary" id="statusSummary"></div>
+      </div>
+      <div class="status-list" id="statusList"></div>
+    </section>
+
+    <section class="grid" id="grid"></section>
+    <section class="empty" id="empty">No media matches this view yet.</section>
+  </main>
+
+  <section class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="close" id="closeLightbox" aria-label="Close">×</button>
+    <div class="lightbox-frame">
+      <div id="lightboxMediaContainer"></div>
+      <aside class="lightbox-panel">
+        <h2 id="lightboxTitle"></h2>
+        <p id="lightboxDate"></p>
+        <p id="lightboxSize"></p>
+        <p id="lightboxDetails"></p>
+        <p id="lightboxFolder"></p>
+        <div class="lightbox-actions">
+          <button class="button primary-action" id="openMedia" type="button">Open File</button>
+          <button class="button" id="prevButton" type="button">Previous</button>
+          <button class="button" id="nextButton" type="button">Next</button>
+          <button class="button danger primary-action" id="deleteButton" type="button">Move To Trash</button>
+        </div>
+        <div class="lightbox-secondary">
+          <button class="button subtle" id="favoriteButton" type="button">Add to Favorites</button>
+          <button class="button subtle" id="showInFinderButton" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2h6.5A2.5 2.5 0 0 1 21 9.5v7A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5v-9Z"></path>
+              <path d="M3 10h18"></path>
+            </svg>
+            <span>Show in Finder</span>
+          </button>
+          <p class="shortcut-hint">
+            <span class="shortcut-group">
+              <span class="shortcut-key">←</span>
+              <span class="shortcut-key">→</span>
+              <span class="shortcut-text">Browse</span>
+            </span>
+            <span class="shortcut-group">
+              <span class="shortcut-key">Enter</span>
+              <span class="shortcut-text">Open</span>
+            </span>
+            <span class="shortcut-group">
+              <span class="shortcut-key">S</span>
+              <span class="shortcut-text">Finder</span>
+            </span>
+            <span class="shortcut-group">
+              <span class="shortcut-key">F</span>
+              <span class="shortcut-text">Favorite</span>
+            </span>
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <script src="./gallery-data.js"></script>
+  <script>
+    const API_BASE = window.location.protocol.startsWith("http") ? window.location.origin : null;
+    const fallbackData = window.GALLERY_DATA || { media: [], collections: [], roots: [] };
+
+    const grid = document.getElementById("grid");
+    const empty = document.getElementById("empty");
+    const search = document.getElementById("search");
+    const typeFilter = document.getElementById("typeFilter");
+    const sort = document.getElementById("sort");
+    const resetFiltersButton = document.getElementById("resetFiltersButton");
+    const libraryMode = document.getElementById("libraryMode");
+    const collectionsMode = document.getElementById("collectionsMode");
+    const favoritesMode = document.getElementById("favoritesMode");
+    const sourceFilter = document.getElementById("sourceFilter");
+    const pathLabel = document.getElementById("pathLabel");
+    const mediaCount = document.getElementById("mediaCount");
+    const collectionCount = document.getElementById("collectionCount");
+    const newestDate = document.getElementById("newestDate");
+    const statusPanel = document.getElementById("statusPanel");
+    const statusSummary = document.getElementById("statusSummary");
+    const statusList = document.getElementById("statusList");
+
+    const lightbox = document.getElementById("lightbox");
+    const lightboxMediaContainer = document.getElementById("lightboxMediaContainer");
+    const lightboxTitle = document.getElementById("lightboxTitle");
+    const lightboxDate = document.getElementById("lightboxDate");
+    const lightboxSize = document.getElementById("lightboxSize");
+    const lightboxDetails = document.getElementById("lightboxDetails");
+    const lightboxFolder = document.getElementById("lightboxFolder");
+    const openMedia = document.getElementById("openMedia");
+    const favoriteButton = document.getElementById("favoriteButton");
+    const showInFinderButton = document.getElementById("showInFinderButton");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    const deleteButton = document.getElementById("deleteButton");
+    const closeLightbox = document.getElementById("closeLightbox");
+
+    const FAVORITES_STORAGE_KEY = "media-gallery-favorites";
+    const LIBRARY_REFRESH_MS = 1000;
+
+    let library = fallbackData;
+    let mode = "library";
+    let activeSource = "system";
+    let activeFolder = null;
+    let visibleMedia = [];
+    let activeIndex = 0;
+    let spotlightMatches = null;
+    let searchRequestId = 0;
+    let libraryRefreshInFlight = false;
+    let favorites = loadFavorites();
+
+    const BASE_SORT_OPTIONS = [
+      { value: "newest", label: "Newest First" },
+      { value: "oldest", label: "Oldest First" },
+      { value: "name", label: "Name" },
+      { value: "size", label: "Largest First" }
+    ];
+
+    const FAVORITES_SORT_OPTIONS = [
+      { value: "recently-added", label: "Recently Added" },
+      ...BASE_SORT_OPTIONS
+    ];
+
+    function loadFavorites() {
+      try {
+        const raw = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+        const parsed = JSON.parse(raw || "[]");
+        if (Array.isArray(parsed)) {
+          return new Map(
+            parsed
+              .filter((value) => typeof value === "string")
+              .map((path, index) => [path, { addedAt: index + 1 }])
+          );
+        }
+        if (parsed && typeof parsed === "object") {
+          return new Map(
+            Object.entries(parsed)
+              .filter(([path]) => typeof path === "string")
+              .map(([path, value]) => {
+                const addedAt = value && typeof value === "object" && typeof value.addedAt === "number"
+                  ? value.addedAt
+                  : Date.now();
+                return [path, { addedAt }];
+              })
+          );
+        }
+        return new Map();
+      } catch {
+        return new Map();
+      }
+    }
+
+    function saveFavorites() {
+      window.localStorage.setItem(
+        FAVORITES_STORAGE_KEY,
+        JSON.stringify(Object.fromEntries(favorites.entries()))
+      );
+    }
+
+    function rootStatusGroups() {
+      const roots = Array.isArray(library.roots) ? library.roots : [];
+      return {
+        system: roots.filter((root) => root?.kind !== "volume"),
+        volumes: roots.filter((root) => root?.kind === "volume"),
+        indexed: roots.filter((root) => root?.status === "indexed"),
+        preserved: roots.filter((root) => root?.status === "preserved"),
+        unavailable: roots.filter((root) => root?.status === "unavailable")
+      };
+    }
+
+    function availableSources() {
+      const groups = rootStatusGroups();
+      const sources = [];
+      if (groups.system.length) {
+        sources.push({
+          id: "system",
+          label: "This Mac",
+          rootPaths: groups.system.map((root) => root.path)
+        });
+      }
+      for (const volume of groups.volumes.filter((root) => root.status !== "unavailable")) {
+        sources.push({
+          id: `volume:${volume.path}`,
+          label: volume.name,
+          rootPaths: [volume.path]
+        });
+      }
+      return sources;
+    }
+
+    function syncSourceFilter() {
+      const sources = availableSources();
+      const previousValue = activeSource;
+      sourceFilter.innerHTML = "";
+      for (const source of sources) {
+        const option = document.createElement("option");
+        option.value = source.id;
+        option.textContent = source.label;
+        sourceFilter.appendChild(option);
+      }
+      const stillExists = sources.some((source) => source.id === previousValue);
+      activeSource = stillExists ? previousValue : (sources[0]?.id || "system");
+      sourceFilter.value = activeSource;
+    }
+
+    function selectedSource() {
+      return availableSources().find((source) => source.id === activeSource) || availableSources()[0] || {
+        id: "system",
+        label: "This Mac",
+        rootPaths: []
+      };
+    }
+
+    function segmentedLabel(parts, partClass = "path-part", sepClass = "path-sep") {
+      return parts.map((part, index) => `
+        ${index > 0 ? `<span class="${sepClass}" aria-hidden="true">•</span>` : ""}
+        <span class="${partClass}">${part}</span>
+      `).join("");
+    }
+
+    function isFavorite(path) {
+      return favorites.has(path);
+    }
+
+    function favoriteAddedAt(path) {
+      return favorites.get(path)?.addedAt || 0;
+    }
+
+    function favoriteLabel(item) {
+      return isFavorite(item.path) ? "Remove Favorite" : "Add to Favorites";
+    }
+
+    function canFavoriteItem(item) {
+      if (!item) return false;
+      const root = (library.roots || []).find((entry) => entry.path === item.root);
+      return !root || root.kind !== "volume";
+    }
+
+    function favoriteGuardMessage() {
+      return "Favorites are only available for This Mac right now. Copy removable media to local storage first if you want to keep it.";
+    }
+
+    function toggleFavorite(item) {
+      if (!item) return;
+      const removing = isFavorite(item.path);
+      if (!canFavoriteItem(item)) {
+        window.alert(favoriteGuardMessage());
+        return;
+      }
+      if (removing) {
+        favorites.delete(item.path);
+      } else {
+        favorites.set(item.path, { addedAt: Date.now() });
+      }
+      saveFavorites();
+      render();
+      if (removing && mode === "favorites" && lightbox.classList.contains("open")) {
+        closeViewer();
+        return;
+      }
+      syncLightboxFavoriteState();
+    }
+
+    function favoriteButtonMarkup(item) {
+      if (!canFavoriteItem(item)) {
+        return "";
+      }
+      const active = isFavorite(item.path);
+      const title = favoriteLabel(item);
+      return `
+        <button class="favorite-toggle${active ? " active" : ""}" type="button" data-favorite-path="${item.path}" aria-label="${title}" title="${title}">
+          <svg viewBox="0 0 24 24" fill="${active ? "currentColor" : "none"}" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3.75l2.55 5.16 5.7.83-4.13 4.03.98 5.68L12 16.8 6.9 19.45l.98-5.68L3.75 9.74l5.7-.83L12 3.75z"></path>
+          </svg>
+        </button>
+      `;
+    }
+
+    function bindFavoriteButtons(scope = document) {
+      for (const button of scope.querySelectorAll("[data-favorite-path]")) {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const path = button.getAttribute("data-favorite-path");
+          const item = library.media.find((entry) => entry.path === path);
+          if (item) toggleFavorite(item);
+        });
+      }
+    }
+
+    function syncLightboxFavoriteState() {
+      const item = visibleMedia[activeIndex];
+      if (!item) {
+        favoriteButton.textContent = "Add to Favorites";
+        favoriteButton.disabled = true;
+        favoriteButton.title = "";
+        favoriteButton.style.display = "none";
+        return;
+      }
+      if (!canFavoriteItem(item)) {
+        favoriteButton.textContent = "Add to Favorites";
+        favoriteButton.disabled = true;
+        favoriteButton.title = "";
+        favoriteButton.style.display = "none";
+        return;
+      }
+      favoriteButton.style.display = "";
+      favoriteButton.textContent = favoriteLabel(item);
+      favoriteButton.disabled = false;
+      favoriteButton.title = favoriteButton.textContent;
+    }
+
+    function scopedMedia() {
+      const source = selectedSource();
+      const allowedRoots = new Set(source.rootPaths);
+      return library.media.filter((item) => allowedRoots.has(item.root));
+    }
+
+    function statusTone(root) {
+      if (root.status === "unavailable") return "danger";
+      if (root.status === "preserved" || (Array.isArray(root.errors) && root.errors.length)) return "warning";
+      return "";
+    }
+
+    function statusLine(root) {
+      if (root.status === "unavailable") {
+        return root.count > 0
+          ? `${root.count} previously indexed items are hidden until this drive reconnects.`
+          : "This drive is not currently connected.";
+      }
+      if (root.status === "preserved") {
+        return root.count > 0
+          ? `${root.count} saved items are still shown from an earlier scan while access is limited.`
+          : "This location could not be read, so its earlier results were kept empty.";
+      }
+      if (Array.isArray(root.errors) && root.errors.length) {
+        return `${root.count} items indexed with a few protected subfolders skipped.`;
+      }
+      return `${root.count} items available.`;
+    }
+
+    function mediaCountsForRoots(rootPaths) {
+      const counts = { total: 0, image: 0, video: 0 };
+      const pathSet = new Set(rootPaths);
+      for (const item of library.media) {
+        if (!pathSet.has(item.root)) continue;
+        counts.total += 1;
+        if (item.kind === "image") counts.image += 1;
+        if (item.kind === "video") counts.video += 1;
+      }
+      return counts;
+    }
+
+    function countsLabel(counts) {
+      return `${counts.total} items • ${counts.image} images • ${counts.video} videos`;
+    }
+
+    function formatDuration(seconds) {
+      if (!Number.isFinite(seconds)) return "";
+      const totalSeconds = Math.max(0, Math.round(seconds));
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const secs = totalSeconds % 60;
+      if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+      }
+      return `${minutes}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function formatDimensions(item) {
+      if (!item.width || !item.height) return "";
+      return `${item.width} x ${item.height}`;
+    }
+
+    function syncSortOptions() {
+      const options = mode === "favorites" ? FAVORITES_SORT_OPTIONS : BASE_SORT_OPTIONS;
+      const previousValue = sort.value;
+      sort.innerHTML = "";
+      for (const optionConfig of options) {
+        const option = document.createElement("option");
+        option.value = optionConfig.value;
+        option.textContent = optionConfig.label;
+        sort.appendChild(option);
+      }
+      const validValue = options.some((option) => option.value === previousValue)
+        ? previousValue
+        : (mode === "favorites" ? "recently-added" : "newest");
+      sort.value = validValue;
+    }
+
+    function summarizeSystemDevice(systemRoots) {
+      if (!systemRoots.length) return null;
+      const counts = mediaCountsForRoots(systemRoots.map((root) => root.path));
+
+      return {
+        name: "This Mac",
+        kind: "system",
+        status: "indexed",
+        tone: "",
+        meta: countsLabel(counts),
+        detail: "",
+      };
+    }
+
+    function renderStatus() {
+      const roots = Array.isArray(library.roots) ? library.roots : [];
+      const groups = rootStatusGroups();
+      const shouldShow = roots.length > 0;
+      statusPanel.classList.toggle("visible", shouldShow);
+      if (!shouldShow) {
+        statusSummary.innerHTML = "";
+        statusList.innerHTML = "";
+        return;
+      }
+
+      const connectedVolumes = groups.volumes.filter((root) => root.status !== "unavailable");
+      const connectedVolumeCount = connectedVolumes.length;
+      const summaryParts = ["Showing media from this Mac"];
+      if (connectedVolumeCount > 0) {
+        summaryParts.push(`${connectedVolumeCount} removable ${connectedVolumeCount === 1 ? "drive" : "drives"} connected`);
+      }
+      statusSummary.innerHTML = summaryParts.map((part, index) => `
+        ${index > 0 ? '<span class="status-summary-sep" aria-hidden="true">•</span>' : ""}
+        <span class="status-summary-part">${part}</span>
+      `).join("");
+
+      statusList.innerHTML = "";
+      const deviceCards = [];
+      const systemCard = summarizeSystemDevice(groups.system);
+      if (systemCard) {
+        systemCard.sourceId = "system";
+        deviceCards.push(systemCard);
+      }
+      deviceCards.push(...connectedVolumes.map((root) => ({
+        ...root,
+        sourceId: `volume:${root.path}`
+      })));
+
+      for (const root of deviceCards) {
+        const clickable = Boolean(root.sourceId);
+        const card = document.createElement(clickable ? "button" : "article");
+        const tone = root.tone || statusTone(root);
+        card.className = tone ? `status-item ${tone}` : "status-item";
+        const detail = root.detail || "";
+        const label = root.kind === "volume" ? "Removable drive" : "Device";
+        const counts = root.kind === "volume" && root.status !== "unavailable"
+          ? countsLabel(mediaCountsForRoots([root.path]))
+          : null;
+        const meta = root.meta || counts || statusLine(root);
+        if (clickable) {
+          card.type = "button";
+          card.setAttribute("data-source-id", root.sourceId);
+          card.setAttribute("aria-label", `Show ${root.name}`);
+        }
+        card.innerHTML = `
+          <p class="status-title">${root.name}</p>
+          <p class="status-meta">${segmentedLabel([label, meta], "meta-part", "meta-sep")}</p>
+          ${detail ? `<p class="status-detail">${detail}</p>` : ""}
+        `;
+        if (clickable) {
+          card.addEventListener("click", () => {
+            activeSource = root.sourceId;
+            activeFolder = null;
+            spotlightMatches = null;
+            mode = "library";
+            syncModeButtons();
+            render();
+          });
+        }
+        statusList.appendChild(card);
+      }
+    }
+
+    function emptyMessage() {
+      const term = search.value.trim();
+      const selectedType = typeFilter.value;
+      const groups = rootStatusGroups();
+      const source = selectedSource();
+      if (mode === "favorites") {
+        if (term) {
+          return `No favorite ${selectedType === "all" ? "media" : selectedType + "s"} matched "${term}" yet.`;
+        }
+        return "No favorites yet. Star items on This Mac to keep them here.";
+      }
+      if (term) {
+        return `No ${selectedType === "all" ? "media" : selectedType + "s"} matched "${term}" in ${source.label}. Try a broader name, folder, or concept search.`;
+      }
+      if (activeFolder) {
+        return "No media in this folder matches the current filters.";
+      }
+      if (mode === "collections") {
+        return `No collections match the current view in ${source.label}.`;
+      }
+      if (groups.preserved.length) {
+        return `No media is available in ${source.label} right now. Some indexed locations are only partially readable in the background.`;
+      }
+      return `No media matches this view in ${source.label}.`;
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+      return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
+    }
+
+    function mediaUrl(path) {
+      if (API_BASE) {
+        return `${API_BASE}/media?path=${encodeURIComponent(path)}`;
+      }
+      return encodeURI(`file://${path}`);
+    }
+
+    function thumbUrl(path) {
+      if (!path) return "";
+      if (API_BASE) {
+        return `${API_BASE}/thumb?path=${encodeURIComponent(path)}`;
+      }
+      return encodeURI(`file://${path}`);
+    }
+
+    function updateStats() {
+      const media = mode === "favorites" ? favoriteMedia() : scopedMedia();
+      const folders = new Set(media.map((item) => item.folder));
+      mediaCount.textContent = String(media.length);
+      collectionCount.textContent = String(folders.size);
+      newestDate.textContent = media[0]?.modified.split(" ")[0] ?? "-";
+    }
+
+    function collectionItems(folder) {
+      return scopedMedia().filter((item) => item.folder === folder);
+    }
+
+    function sortItems(items) {
+      const list = [...items];
+      const sortMode = sort.value;
+      list.sort((a, b) => {
+        if (sortMode === "recently-added") return favoriteAddedAt(b.path) - favoriteAddedAt(a.path);
+        if (sortMode === "newest") return b.timestamp - a.timestamp;
+        if (sortMode === "oldest") return a.timestamp - b.timestamp;
+        if (sortMode === "size") return b.size - a.size;
+        return a.name.localeCompare(b.name);
+      });
+      return list;
+    }
+
+    function filteredMedia() {
+      const term = search.value.trim().toLowerCase();
+      const selectedType = typeFilter.value;
+      let items = mode === "favorites" ? favoriteMedia() : scopedMedia();
+      if (activeFolder) {
+        items = items.filter((item) => item.folder === activeFolder);
+      }
+      return sortItems(items.filter((item) => {
+        if (selectedType !== "all" && item.kind !== selectedType) return false;
+        const filenameMatch = item.name.toLowerCase().includes(term);
+        const folderMatch = item.folderName.toLowerCase().includes(term);
+        const spotlightMatch = !term || spotlightMatches === null || spotlightMatches.has(item.path);
+        return !term || filenameMatch || folderMatch || spotlightMatch;
+      }));
+    }
+
+    function filteredCollections() {
+      const term = search.value.trim().toLowerCase();
+      const selectedType = typeFilter.value;
+      return sortItems(
+        library.collections.map((item) => {
+          const items = collectionItems(item.folder).filter((mediaItem) => selectedType === "all" || mediaItem.kind === selectedType);
+          if (!items.length) return null;
+          items.sort((a, b) => b.timestamp - a.timestamp);
+          const latest = items[0];
+          return {
+            ...item,
+            count: items.length,
+            latestPath: latest.path,
+            latestKind: latest.kind,
+            latestTimestamp: latest.timestamp,
+            latestModified: latest.modified,
+            latestThumbnailPath: latest.thumbnailPath || null
+          };
+        }).filter((item) => item !== null).filter((item) => {
+          if (!term) return true;
+          return item.folderName.toLowerCase().includes(term) || item.folderRelative.toLowerCase().includes(term);
+        }).map((item) => ({
+          ...item,
+          name: item.folderName,
+          timestamp: item.latestTimestamp,
+          size: item.count
+        }))
+      );
+    }
+
+    function favoriteMedia() {
+      return sortItems(library.media.filter((item) => favorites.has(item.path) && canFavoriteItem(item)));
+    }
+
+    function rebuildCollectionsFromMedia(mediaItems) {
+      const grouped = new Map();
+      for (const item of mediaItems) {
+        if (!grouped.has(item.folder)) grouped.set(item.folder, []);
+        grouped.get(item.folder).push(item);
+      }
+
+      const collections = [];
+      for (const [folder, items] of grouped.entries()) {
+        items.sort((a, b) => b.timestamp - a.timestamp);
+        const latest = items[0];
+        collections.push({
+          id: folder,
+          folder,
+          folderName: latest.folderName,
+          folderRelative: latest.folderRelative,
+          root: latest.root,
+          rootName: latest.rootName,
+          count: items.length,
+          latestPath: latest.path,
+          latestKind: latest.kind,
+          latestTimestamp: latest.timestamp,
+          latestModified: latest.modified,
+          latestThumbnailPath: latest.thumbnailPath || null
+        });
+      }
+
+      collections.sort((a, b) => b.latestTimestamp - a.latestTimestamp);
+      return collections;
+    }
+
+    function hasActiveFilters() {
+      return search.value.trim() !== "" || typeFilter.value !== "all" || activeFolder !== null;
+    }
+
+    function syncResetFiltersButton() {
+      resetFiltersButton.classList.toggle("visible", hasActiveFilters());
+    }
+
+    function renderLibrary() {
+      visibleMedia = filteredMedia();
+      grid.innerHTML = "";
+      const source = selectedSource();
+      if (mode === "favorites") {
+        pathLabel.innerHTML = segmentedLabel(["This Mac", "Favorites"]);
+      } else {
+        pathLabel.innerHTML = segmentedLabel(activeFolder ? [source.label, activeFolder] : [source.label, "Library"]);
+      }
+
+      if (!visibleMedia.length) {
+        empty.textContent = emptyMessage();
+        empty.style.display = "block";
+        return;
+      }
+
+      empty.style.display = "none";
+
+      for (const item of visibleMedia) {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const mediaMarkup = item.kind === "video"
+          ? (
+            item.thumbnailPath
+              ? `<img class="video-thumb" src="${thumbUrl(item.thumbnailPath)}" alt="${item.name}">`
+              : `<div class="video-thumb"></div>`
+          )
+          : `<img class="thumb" src="${mediaUrl(item.path)}" alt="${item.name}">`;
+
+        card.innerHTML = `
+          ${favoriteButtonMarkup(item)}
+          ${mediaMarkup}
+          <div class="meta">
+            <h2 class="title">${item.name}</h2>
+            <p class="details path">${item.folderRelative === "." ? item.rootName : item.folderRelative}</p>
+            <div class="meta-row">
+              <p class="details date">${item.modified}</p>
+              <span class="chip">${item.kind === "video" ? "Video" : "Image"} · ${formatSize(item.size)}</span>
+            </div>
+          </div>
+        `;
+        card.addEventListener("click", () => openLightbox(item.path));
+        bindFavoriteButtons(card);
+        grid.appendChild(card);
+      }
+    }
+
+    function renderCollections() {
+      if (mode === "favorites") {
+        renderLibrary();
+        return;
+      }
+      const collections = filteredCollections();
+      grid.innerHTML = "";
+      pathLabel.innerHTML = segmentedLabel([selectedSource().label, "Collections"]);
+
+      if (!collections.length) {
+        empty.textContent = emptyMessage();
+        empty.style.display = "block";
+        return;
+      }
+
+      empty.style.display = "none";
+
+      for (const collection of collections) {
+        const card = document.createElement("article");
+        card.className = "card";
+        const coverMarkup = collection.latestKind === "video"
+          ? (
+            collection.latestThumbnailPath
+              ? `<img class="video-thumb" src="${thumbUrl(collection.latestThumbnailPath)}" alt="${collection.folderName}">`
+              : `<div class="video-thumb"></div>`
+          )
+          : `<img class="thumb" src="${mediaUrl(collection.latestPath)}" alt="${collection.folderName}">`;
+
+        card.innerHTML = `
+          <div class="collection-thumb">
+            ${coverMarkup}
+            <div class="collection-badge">${collection.count} items</div>
+          </div>
+          <div class="meta">
+            <h2 class="title">${collection.folderName}</h2>
+            <p class="details path">${collection.folderRelative === "." ? collection.rootName : collection.folderRelative}</p>
+            <div class="meta-row">
+              <p class="details date">${collection.latestModified}</p>
+              <span class="chip">${collection.rootName}</span>
+            </div>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          activeFolder = collection.folder;
+          mode = "library";
+          syncModeButtons();
+          render();
+        });
+        grid.appendChild(card);
+      }
+    }
+
+    function render() {
+      syncSourceFilter();
+      syncSortOptions();
+      sourceFilter.disabled = false;
+      syncResetFiltersButton();
+      updateStats();
+      renderStatus();
+      if (mode === "library" || mode === "favorites") {
+        renderLibrary();
+      } else {
+        renderCollections();
+      }
+    }
+
+    function syncModeButtons() {
+      libraryMode.classList.toggle("active", mode === "library");
+      collectionsMode.classList.toggle("active", mode === "collections");
+      favoritesMode.classList.toggle("active", mode === "favorites");
+    }
+
+    function findMedia(path) {
+      return visibleMedia.findIndex((item) => item.path === path);
+    }
+
+    function openLightbox(path) {
+      activeIndex = findMedia(path);
+      const item = visibleMedia[activeIndex];
+      if (!item) return;
+      lightboxMediaContainer.innerHTML = item.kind === "video"
+        ? (
+          item.browserPlayable === false
+            ? `<div class="lightbox-fallback"><h3>Open in your video app</h3><p>This video uses a browser-unfriendly codec, so it may not play inline here. Use Open File to view it in your default media app.</p></div>`
+            : `<video class="lightbox-media" src="${mediaUrl(item.path)}" controls autoplay playsinline></video>`
+        )
+        : `<div class="lightbox-media-wrap">
+            <button class="fullscreen-overlay" id="inlineFullscreenButton" type="button" aria-label="Full screen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M8 3H4v4"></path>
+                <path d="M16 3h4v4"></path>
+                <path d="M8 21H4v-4"></path>
+                <path d="M20 17v4h-4"></path>
+              </svg>
+            </button>
+            <img class="lightbox-media" src="${mediaUrl(item.path)}" alt="${item.name}">
+          </div>`;
+      lightboxTitle.textContent = item.name;
+      lightboxDate.textContent = `Modified: ${item.modified}`;
+      lightboxSize.textContent = `Size: ${formatSize(item.size)}`;
+      const detailParts = [];
+      const dimensions = formatDimensions(item);
+      if (dimensions) detailParts.push(dimensions);
+      if (item.kind === "video" && Number.isFinite(item.durationSeconds)) {
+        detailParts.push(formatDuration(item.durationSeconds));
+      }
+      if (item.kind === "video" && Array.isArray(item.codecs) && item.codecs.length) {
+        detailParts.push(item.codecs.join(", "));
+      }
+      lightboxDetails.textContent = detailParts.length ? `Details: ${detailParts.join(" • ")}` : "";
+      lightboxFolder.textContent = `Folder: ${item.folder}`;
+      const inlineFullscreenButton = document.getElementById("inlineFullscreenButton");
+      if (inlineFullscreenButton) {
+        inlineFullscreenButton.addEventListener("click", fullscreenActiveImage);
+      }
+      syncLightboxFavoriteState();
+      lightbox.classList.add("open");
+      lightbox.setAttribute("aria-hidden", "false");
+    }
+
+    function closeViewer() {
+      lightbox.classList.remove("open");
+      lightbox.setAttribute("aria-hidden", "true");
+      lightboxMediaContainer.innerHTML = "";
+      favoriteButton.textContent = "Add to Favorites";
+      lightboxDetails.textContent = "";
+    }
+
+    function stepLightbox(direction) {
+      if (!visibleMedia.length) return;
+      activeIndex = (activeIndex + direction + visibleMedia.length) % visibleMedia.length;
+      openLightbox(visibleMedia[activeIndex].path);
+    }
+
+    async function loadLibrary({ preserveViewer = false } = {}) {
+      if (!API_BASE) {
+        render();
+        return;
+      }
+      const openPath = preserveViewer && lightbox.classList.contains("open")
+        ? visibleMedia[activeIndex]?.path || null
+        : null;
+      const response = await fetch(`${API_BASE}/api/library`, { cache: "no-store" });
+      library = await response.json();
+      render();
+      if (openPath) {
+        const stillVisible = visibleMedia.some((item) => item.path === openPath);
+        if (stillVisible) {
+          openLightbox(openPath);
+        } else {
+          closeViewer();
+        }
+      }
+    }
+
+    async function refreshLibraryLive() {
+      if (!API_BASE || libraryRefreshInFlight) return;
+      libraryRefreshInFlight = true;
+      try {
+        await loadLibrary({ preserveViewer: true });
+      } catch (error) {
+        console.debug("Live library refresh skipped", error);
+      } finally {
+        libraryRefreshInFlight = false;
+      }
+    }
+
+    async function trashActiveItem() {
+      const item = visibleMedia[activeIndex];
+      if (!item || !API_BASE) return;
+      const confirmed = window.confirm(`Move "${item.name}" to Trash?`);
+      if (!confirmed) return;
+      deleteButton.disabled = true;
+      const response = await fetch(`${API_BASE}/api/trash`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: item.path })
+      });
+      const payload = await response.json();
+      deleteButton.disabled = false;
+      const alreadyGone = response.status === 404;
+      if ((!response.ok || !payload.ok) && !alreadyGone) {
+        window.alert(payload.error || "Unable to move file to Trash.");
+        return;
+      }
+      closeViewer();
+      library.media = library.media.filter((entry) => entry.path !== item.path);
+      library.collections = rebuildCollectionsFromMedia(library.media);
+      spotlightMatches = null;
+      render();
+      await loadLibrary();
+    }
+
+    async function openActiveFile() {
+      const item = visibleMedia[activeIndex];
+      if (!item || !API_BASE) return;
+      openMedia.disabled = true;
+      const response = await fetch(`${API_BASE}/api/open`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: item.path })
+      });
+      const payload = await response.json();
+      openMedia.disabled = false;
+      if (!response.ok || !payload.ok) {
+        window.alert(payload.error || "Unable to open file.");
+      }
+    }
+
+    async function showActiveItemInFinder() {
+      const item = visibleMedia[activeIndex];
+      if (!item || !API_BASE) return;
+      showInFinderButton.disabled = true;
+      try {
+        const response = await fetch(`${API_BASE}/api/show-in-finder`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ path: item.path })
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok || !payload.ok) {
+          window.alert(payload.error || "Unable to show file in Finder. Try relaunching the gallery.");
+        }
+      } catch (error) {
+        console.error(error);
+        window.alert("Unable to reach the gallery server. Try relaunching the gallery.");
+      } finally {
+        showInFinderButton.disabled = false;
+      }
+    }
+
+    async function fullscreenActiveImage() {
+      const image = lightboxMediaContainer.querySelector("img.lightbox-media");
+      if (!image) return;
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        return;
+      }
+      if (image.requestFullscreen) {
+        await image.requestFullscreen();
+      }
+    }
+
+    async function updateSearch() {
+      const term = search.value.trim();
+      if (!API_BASE || !term) {
+        spotlightMatches = null;
+        render();
+        return;
+      }
+      const requestId = ++searchRequestId;
+      const response = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(term)}`);
+      const payload = await response.json();
+      if (requestId !== searchRequestId) return;
+      spotlightMatches = new Set(Array.isArray(payload.paths) ? payload.paths : []);
+      render();
+    }
+
+    search.addEventListener("input", updateSearch);
+    sort.addEventListener("change", render);
+    typeFilter.addEventListener("change", render);
+    resetFiltersButton.addEventListener("click", () => {
+      search.value = "";
+      typeFilter.value = "all";
+      spotlightMatches = null;
+      activeFolder = null;
+      render();
+    });
+    libraryMode.addEventListener("click", () => {
+      mode = "library";
+      syncModeButtons();
+      render();
+    });
+    collectionsMode.addEventListener("click", () => {
+      activeFolder = null;
+      mode = "collections";
+      syncModeButtons();
+      render();
+    });
+    favoritesMode.addEventListener("click", () => {
+      activeFolder = null;
+      activeSource = "system";
+      mode = "favorites";
+      sort.value = "recently-added";
+      syncModeButtons();
+      render();
+    });
+    sourceFilter.addEventListener("change", () => {
+      activeSource = sourceFilter.value;
+      activeFolder = null;
+      spotlightMatches = null;
+      if (mode === "favorites" && activeSource !== "system") {
+        mode = "library";
+        syncModeButtons();
+      }
+      render();
+    });
+    favoriteButton.addEventListener("click", () => {
+      const item = visibleMedia[activeIndex];
+      if (item) toggleFavorite(item);
+    });
+    openMedia.addEventListener("click", openActiveFile);
+    showInFinderButton.addEventListener("click", showActiveItemInFinder);
+    closeLightbox.addEventListener("click", closeViewer);
+    prevButton.addEventListener("click", () => stepLightbox(-1));
+    nextButton.addEventListener("click", () => stepLightbox(1));
+    deleteButton.addEventListener("click", trashActiveItem);
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeViewer();
+    });
+    window.addEventListener("keydown", (event) => {
+      const target = event.target;
+      const typing = target instanceof HTMLElement && (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable
+      );
+      if (!typing && event.key === "/") {
+        event.preventDefault();
+        search.focus();
+        search.select();
+        return;
+      }
+      if (!lightbox.classList.contains("open")) return;
+      if (typing) return;
+      if (event.key === "Escape") closeViewer();
+      if (event.key === "ArrowLeft") stepLightbox(-1);
+      if (event.key === "ArrowRight") stepLightbox(1);
+      if (event.key === "Enter") {
+        event.preventDefault();
+        openActiveFile();
+      }
+      if (event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        showActiveItemInFinder();
+      }
+      if (event.key.toLowerCase() === "f") {
+        event.preventDefault();
+        const item = visibleMedia[activeIndex];
+        if (item && canFavoriteItem(item)) {
+          toggleFavorite(item);
+        }
+      }
+      if (event.key === "Backspace" || event.key === "Delete") {
+        event.preventDefault();
+        trashActiveItem();
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        refreshLibraryLive();
+      }
+    });
+
+    window.setInterval(() => {
+      refreshLibraryLive();
+    }, LIBRARY_REFRESH_MS);
+
+    syncModeButtons();
+    loadLibrary().catch(() => render());
+  </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="162" y1="120" x2="852" y2="888" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0C5057"/>
+      <stop offset="1" stop-color="#0A2329"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="292" y1="274" x2="766" y2="792" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6FFFE" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#7CE6DD" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="340" y1="330" x2="718" y2="744" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#96F0E6"/>
+      <stop offset="1" stop-color="#2AB5B0"/>
+    </linearGradient>
+    <filter id="shadow" x="176" y="138" width="672" height="748" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="34"/>
+      <feGaussianBlur stdDeviation="40"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0156863 0 0 0 0 0.101961 0 0 0 0 0.117647 0 0 0 0.26 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+    </filter>
+  </defs>
+  <rect x="84" y="84" width="856" height="856" rx="220" fill="url(#bg)"/>
+  <circle cx="766" cy="260" r="160" fill="#40D6CA" fill-opacity="0.12"/>
+  <circle cx="304" cy="224" r="124" fill="#F3AA6C" fill-opacity="0.12"/>
+  <g filter="url(#shadow)">
+    <rect x="256" y="218" width="512" height="588" rx="112" fill="url(#glass)" stroke="#FFFFFF" stroke-opacity="0.16"/>
+    <rect x="312" y="290" width="400" height="306" rx="58" fill="#0A2A30"/>
+    <path d="M364 532L442 442C458 423 487 421 505 438L562 490C581 507 611 505 628 486L712 392V596H312V532H364Z" fill="url(#accent)"/>
+    <circle cx="626" cy="380" r="42" fill="#C8FFF8"/>
+    <rect x="344" y="646" width="336" height="22" rx="11" fill="#D7F9F5" fill-opacity="0.9"/>
+    <rect x="344" y="690" width="242" height="18" rx="9" fill="#A9DDD7" fill-opacity="0.66"/>
+  </g>
+</svg>
