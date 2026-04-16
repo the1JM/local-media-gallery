@@ -246,7 +246,7 @@ A few implementation lessons mattered a lot here:
 - internal cache data should be kept clearly separate from indexed user media
 - path independence should be built in from the start
 - product rules should be locked early to avoid wasted UI rework
-- live update behavior is much better when it is treated as a system, not a patch added later
+- live update behavior is much better when it is treated as a system instead of patching it in later
 
 ## Repository Structure
 
